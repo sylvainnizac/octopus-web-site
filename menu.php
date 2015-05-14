@@ -23,8 +23,21 @@ if(!isset($_SESSION['Id']))
 		<div id="global">
 			<div id="contenu">
 				<img src="images/procrastinators_association.gif" class="logoPrincipal" alt="procrastinators logo" />
-				<h2><a href="racine.php?directory=/media/Donnees/Ma musique/">MUSIQUE</a></h2>
-				<h2><a href="racine.php?directory=/media/Donnees/mes videos/">FILMS</a></h2>
+                
+                <form id="musique" action="racine.php" method="post">
+                    <input type="hidden" name="directory" value="1"/>
+                </form>
+                <h2><a href='#' onclick='document.getElementById("musique").submit()'>MUSIQUE</a></h2>
+                
+                <form id="film" action="racine.php" method="post">
+                    <input type="hidden" name="directory" value="2"/>
+                </form>
+                <h2><a href='#' onclick='document.getElementById("film").submit()'>FILMS</a></h2>
+                
+                <form id="animes" action="racine.php" method="post">
+                    <input type="hidden" name="directory" value="3"/>
+                </form>
+                <h2><a href='#' onclick='document.getElementById("animes").submit()'>ANIMES</a></h2>
 			</div>
 		</div>
 	</body>

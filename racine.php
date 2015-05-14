@@ -25,51 +25,21 @@ if(!isset($_SESSION['Id']))
 			</div>
 		</div>
 		<!-- ajout du lien vers le dossier parent-->
-		<li class="folder"><a href="menu.php">Dossier parent</a></li>
+		<li class="folder"><a href="menu.php">Retour au menu</a></li>
 
 <?php
-function scan($dir) {
-    // On regarde déjà si le dossier existe
-    if(is_dir($dir)) {
-        // On le scan et on récupère dans un tableau le nom des fichiers et des dossiers en ignorant le dossier courant et le dossier précédent
-        $files = array_diff(scandir($dir), array('..', '.'));
- 
-        // On tri le tableau de façon intelligente (à la façon humaine)
-        // http://www.php.net/function.natcasesort
-        natcasesort($files);
- 
-        // On commence par afficher les dossiers
-        foreach($files as $f) {
-            // S'il y a un dossier
-            if(is_dir($dir.$f)) {
-                // On affiche alors les données
-                echo '<li class="folder"><a href="final.php?directory='.$dir.$f.'/">'.$f.'</a></li>';
-            }
-        }
- 
-        // Puis on affiche les fichiers
-        foreach($files as $f) {
-            // S'il y a un fichier
-            if(is_file($dir.$f)) {
-                echo '<a><li class="file" rel="'.$dir.$f.'">'.$f.'</li></a>';
-            }
-        }
-    }
-}
-if (isset($_GET['directory'])) // On vérifie si le directory est bien donné
+include('dir.php');
+
+//Vérification de la validité des infos reçues
+$checked_dir = verifdir($_POST['directory'], 'racine');
+if ($checked_dir != False)
 {
-    if ($_GET['directory'] == "/" OR $_GET['directory'] == "/media/Donnees/" OR $_GET['directory'] == "/media/")
-    {
-        echo 'Tu fous quoi là??';
-        echo 'Retourne à l accueil et recommence';
-    }
-    else
-    {
-        scan($_GET['directory']);
-    }
+    //les données sont bonnes, on poursuit la génération de la table
+    scan($checked_dir);
 }
-else // Il manque des paramètres, on avertit le visiteur
+else
 {
+    //Les données reçues ne sont pas valables, message d'erreur
     echo 'Tu fous quoi là??';
     echo 'Retourne à l accueil et recommence';
 }
