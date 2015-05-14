@@ -1,0 +1,59 @@
+.degrade {
+	background-image:linear-gradient(#F8fcff, #FFECB4);
+}
+
+img.logoPrincipal{
+    display: block;
+    margin: auto;
+    vertical-align: middle;
+}
+
+.paddnavbar{
+	padding-top: 50px;
+}
+
+.margnavbar{
+	margin-top: 50px;
+}
+
+.unmargnavbot{
+	margin-bottom: 0px;
+}
+
+.affichliste{
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.tree{
+  padding-top: 10px;
+}
+
+.foldbg{
+    background-image:linear-gradient(to left, #E8F0F6, #F8fcff);
+}
+
+.foldpadd{
+    padding-bottom: 5px;
+}
+
+.paysage{
+    max-height: 300px;
+    position: relative;
+    top: 22%;
+}
+.portrait{
+    max-height: 300px;
+}
+
+.miniature{
+    max-height: 300px;
+}
+
+.cadre{
+    height: 310px;
+}
+
+.titregalerie{
+    height: 100px;
+}
