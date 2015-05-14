@@ -1,6 +1,7 @@
 <?php
 //Fonction de récupération de la liste des dossiers et fichiers. Les dossier sont juste des liens
 function scan($dir) {
+    include('classes.php');
     // On regarde déjà si le dossier existe
     if(is_dir($dir)) {
         // On le scan et on récupère dans un tableau le nom des fichiers et des dossiers en ignorant le dossier courant et le dossier précédent
@@ -11,26 +12,63 @@ function scan($dir) {
         natcasesort($files);
         
         $suite = 0;
+
+        //on charge le tableau des objets servant à contenir les résultats
+        $array_of_the_dead = array(
+            new MorceauListe(array("1", "2", "3", "4", "5", "6", "7", "8", "9", "0"), 'chiffres'),
+            new MorceauListe(array(A, B, a, b), 'AB'),
+            new MorceauListe(array(C, D, c, d), 'CD'),
+            new MorceauListe(array(E, F, e, f), 'EF'),
+            new MorceauListe(array(G, H, g, h), 'GH'),
+            new MorceauListe(array(I, J, K, i, j, k), 'IJK'),
+            new MorceauListe(array(L, M, N, l, m, n), 'LMN'),
+            new MorceauListe(array(O, P, Q, o, p, q), 'OPQ'),
+            new MorceauListe(array(R, S, T, r, s, t), 'RST'),
+            new MorceauListe(array(U, V, W, u, v, w), 'UVW'),
+            new MorceauListe(array(X, Y, Z, x, y, z), 'XYZ'),
+            new MorceauListe(array(), 'speciaux')
+        );
  
-        // On commence par afficher les dossiers
+        // On parcours la liste des dossier et fichiers
         foreach($files as $f) {
             // S'il y a un dossier
             if(is_dir($dir.$f)) {
-                // On affiche alors les données
-                echo
-                '<form id="'.$suite.'" action="final.php" method="post">
-                    <input type="hidden" name="directory" value="'.$dir.$f.'/"/>
-                </form>
-                <li class="folder"><a href="#" onclick=\'document.getElementById("'.$suite.'").submit()\'>'.$f.'</a></li>';
-                $suite = $suite + 1;
+                //on regarde dans quel le premier caractère du nom de dossier 
+                foreach ($array_of_the_dead as $aotd) {
+                    //on déplace le nom de dossier dans le bon objet
+                    if (in_array($f[0], $aotd->searchchar)) {
+                        $aotd->founddir[] = $f;
+                    }
+                }
             }
         }
  
+        //on parcours les objets
+        foreach ($array_of_the_dead as $aotd) {
+            //affichage de l'entête de partie
+            echo '<ul class="tree '.$aotd->groupname.'" style="display: none;">';
+                //chargement de la partie avec les bonnes entrée
+                foreach ($aotd->founddir as $fd) {
+                    echo
+                        '<form id="'.$suite.'" action="final.php" method="post">
+                            <input type="hidden" name="directory" value="'.$dir.$fd.'/"/>
+                        </form>
+                        <div class="foldpadd">
+                            <div class="row foldbg" onclick=\'document.getElementById("'.$suite.'").submit()\'>'.$fd.'</div>
+                        </div>';
+                        $suite = $suite + 1;
+                }
+                //balise de fin de partie
+                echo '</ul>';
+        }
+
+
+
         // Puis on affiche les fichiers
         foreach($files as $f) {
             // S'il y a un fichier
             if(is_file($dir.$f)) {
-                echo '<a><li class="file" rel="'.$dir.$f.'">'.$f.'</li></a>';
+                echo '<div class="row file" rel="'.$dir.$f.'">'.$f.'</div>';
             }
         }
     }
@@ -51,13 +89,15 @@ function scancomplete($dir) {
             // S'il y a un dossier
             if(is_dir($dir.$f)) {
                 // On affiche alors les données
-                echo '<li class="folder"><a>'.$f.'</a></li>';
-                echo '<ul class="tree">';
+                echo
+                    '<div class="foldpadd">
+                        <div class="row folder foldbg">'.$f.'</div>
+                    <ul class="tree">';
  
                 // Et du coup comme c'est unroot dossier, on le rescan
                 scancomplete($dir.$f."/");
  
-                echo '</ul>';
+                echo '</ul></div>';
             }
         }
  
@@ -65,7 +105,10 @@ function scancomplete($dir) {
         foreach($files as $f) {
             // S'il y a un fichier
             if(is_file($dir.$f)) {
-                echo '<a><li class="file" rel="'.$dir.$f.'">'.$f.'</li></a>';
+                echo
+                    '<div class="foldpadd">
+                        <div class="row file foldbg" rel="'.$dir.$f.'">'.$f.'</div>
+                    </div>';
             }
         }
     }

@@ -1,4 +1,5 @@
 <?php
+include('config.php');
 //On démarre la session
 session_start();
 //par défaut la session est fermée
@@ -22,8 +23,6 @@ if(empty($MdP))
 
 $Idmod = "'$Id'";
 
-include('config.php');
-
 //connection à la base de données
 $db = mysql_connect(DBHOST, DBUSER, DBPASSWD) or die('Erreur de connexion');
 mysql_select_db('Id', $db) or die('Base inexistante');
@@ -46,7 +45,7 @@ else
 }
 
 //fermeture de la connection à la base
-mysql_close();
+mysql_close($db);
 
 //on vérifie que le Pwd match et on redirige sur la bonne page
 if ( $result['Pwd'] == $MdP )
